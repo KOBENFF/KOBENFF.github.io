@@ -2,72 +2,64 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ไอโจ้ Size 56</title>
+  <title>บอกรักเธอ 💖</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f0f0f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+      background: linear-gradient(to right, #ffcccc, #ffe6e6);
+      font-family: 'Prompt', sans-serif;
+      text-align: center;
+      padding-top: 100px;
     }
 
-    .menu {
-      background: white;
-      padding: 20px;
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      display: inline-block;
+    }
+
+    button {
+      background-color: #ff6699;
+      color: white;
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 300px;
-    }
-
-    .menu h2 {
-      color: red;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-
-    select, input[type="checkbox"] {
-      margin-top: 5px;
-    }
-
-    .slider {
-      width: 100%;
-      margin-top: 15px;
-    }
-
-    .footer {
-      font-size: 0.8em;
+      cursor: pointer;
       margin-top: 20px;
-      text-align: center;
-      color: #333;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff3366;
+    }
+
+    #love-message {
+      margin-top: 30px;
+      font-size: 24px;
+      color: #cc3366;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="menu">
-    <h2>ไอโจ้ Size 56</h2>
-    <div class="footer">
-      กูทำมาหลอก<br>
-      มันใช้ไม่ได้จริง เพราะมันว่างเปล่า มีแค่ปุ่มกดเล่นๆ
-    </div>
-    <label><input type="checkbox" checked> ยิงหัว100%</label>
-
-    <label>เลือกระดับยิงหัว
-      <select>
-        <option>สูง</option>
-        <option>กลาง</option>
-        <option>ต่ำ</option>
-      </select>
-    </label>
-
-    <label><input type="checkbox"> Dpi 800</label>
-    <label><input type="checkbox"> Brazil 90%</label>
+  <div class="container">
+    <h1>เรามีบางอย่างจะบอกเธอ...</h1>
+    <button onclick="showMessage()">คลิกที่นี่ 💌</button>
+    <p id="love-message"></p>
   </div>
+
+  <script>
+    function showMessage() {
+      const message = "เราชอบเธอมากเลยนะ 💖 อยากอยู่กับเธอไปนานๆ :)";
+      document.getElementById("love-message").textContent = message;
+    }
+  </script>
 </body>
 </html>
