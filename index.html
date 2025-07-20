@@ -1,65 +1,104 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>เสือก</title>
+  <title>ZEUS PANEL FREE</title>
   <style>
     body {
-      background: linear-gradient(to right, #ffcccc, #ffe6e6);
-      font-family: 'Prompt', sans-serif;
-      text-align: center;
-      padding-top: 100px;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    .container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      display: inline-block;
-    }
-
-    button {
-      background-color: #ff6699;
+    .panel {
+      background-color: #333;
       color: white;
-      padding: 15px 25px;
-      font-size: 18px;
-      border: none;
+      display: flex;
       border-radius: 10px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: 0.3s ease;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
     }
 
-    button:hover {
-      background-color: #ff3366;
+    .image-container {
+      background-color: #fff;
     }
 
-    #love-message {
-      margin-top: 30px;
+    .image-container img {
+      height: 100%;
+      width: 250px;
+      object-fit: cover;
+    }
+
+    .content {
+      padding: 20px;
+      width: 300px;
+    }
+
+    .content h1 {
+      margin-top: 0;
       font-size: 24px;
-      color: #cc3366;
-      animation: fadeIn 1s ease-in-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .menu {
+      background-color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .menu h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .menu p {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .menu button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>ยุ่ง</h1>
-    <button onclick="showMessage()">คลิกที่นี่ 💌</button>
-    <p id="love-message"></p>
-  </div>
+  <div class="panel">
+    <div class="image-container">
+      <img src="https://i.imgur.com/3fXYJ8w.png" alt="Character">
+    </div>
+    <div class="content">
+      <h1>งอน<br>FREE</h1>
 
-  <script>
-    function showMessage() {
-      const message = "'งอน':)";
-      document.getElementById("love-message").textContent = message;
-    }
-  </script>
+      <div class="menu">
+        <h3>วิธีแก้</h3>
+        <p>เงี่ยน อมควย</p>
+        <button>เริ่มอม</button>
+      </div>
+
+      <div class="menu">
+        <h3>วิธี2 โอกาส หายเยอะ</h3>
+        <p>มาให้เย็ด</p>
+        <button>เริ่มเย็ด</button>
+      </div>
+
+      <div class="footer">เขียนโค้ด By Jojo 56</div>
+    </div>
+  </div>
 </body>
 </html>
