@@ -1,104 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>18+</title>
+  <title>Runin Panel</title>
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #111;
+      font-family: sans-serif;
+      background: #f0f0f0;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-    }
-
-    .panel {
-      background-color: #333;
-      color: white;
-      display: flex;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-    }
-
-    .image-container {
-      background-color: #fff;
-    }
-
-    .image-container img {
-      height: 100%;
-      width: 250px;
-      object-fit: cover;
-    }
-
-    .content {
-      padding: 20px;
-      width: 300px;
-    }
-
-    .content h1 {
-      margin-top: 0;
-      font-size: 24px;
+      margin: 0;
     }
 
     .menu {
-      background-color: #222;
-      padding: 15px;
+      background: white;
+      padding: 20px;
       border-radius: 10px;
-      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 300px;
     }
 
-    .menu h3 {
-      margin: 0 0 10px;
-      font-size: 14px;
+    .menu h2 {
+      color: red;
+      text-align: center;
     }
 
-    .menu p {
-      font-size: 12px;
-      margin-bottom: 10px;
+    label {
+      display: block;
+      margin-top: 10px;
     }
 
-    .menu button {
-      background-color: black;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 5px;
-      cursor: pointer;
+    select, input[type="checkbox"] {
+      margin-top: 5px;
+    }
+
+    .slider {
+      width: 100%;
+      margin-top: 15px;
     }
 
     .footer {
+      font-size: 0.8em;
+      margin-top: 20px;
       text-align: center;
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 10px;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <div class="panel">
-    <div class="image-container">
-      <img src="https://media.discordapp.net/attachments/736281485216317442/834505950391566376/fuck.gif?ex=687de77a&is=687c95fa&hm=60d1035303fa47f1b650edca2f5353c888dc98fe1e938dfea7bcaad9ccdfbab5&=" alt="Character">
+  <div class="menu">
+    <h2>Runin Panel</h2>
+
+    <label><input type="checkbox" checked> เปิดจุดหัว</label>
+
+    <label>เลือกระดับยิงหัว
+      <select>
+        <option>HIGH = สูง</option>
+        <option>MEDIUM = กลาง</option>
+        <option>LOW = ต่ำ</option>
+      </select>
+    </label>
+
+    <label>เลือกโหมดที่เล่น
+      <select>
+        <option>1-1</option>
+        <option>2-2</option>
+        <option>ทีม</option>
+        <option>เดิมพัน</option>
+      </select>
+    </label>
+
+    <label><input type="checkbox"> เพิ่มจบไว 100%</label>
+    <label><input type="checkbox"> ตอบสนองไวขึ้น</label>
+
+    <div class="footer">
+      กันแบน - กันดำ - กันรายงาน<br>
+      ปรับความไวการลากหัว
     </div>
-    <div class="content">
-      <h1>งอน<br>FREE</h1>
 
-      <div class="menu">
-        <h3>วิธีแก้</h3>
-        <p>เงี่ยน อมควย</p>
-        <button>เริ่มอม</button>
-      </div>
-
-      <div class="menu">
-        <h3>วิธี2 โอกาส หายเยอะ</h3>
-        <p>มาให้เย็ด</p>
-        <button>เริ่มเย็ด</button>
-      </div>
-
-      <div class="footer">เขียนโค้ด By Jojo 56</div>
-    </div>
+    <input type="range" class="slider" min="0" max="100" value="60">
   </div>
 </body>
 </html>
