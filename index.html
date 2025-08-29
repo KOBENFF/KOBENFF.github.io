@@ -2,85 +2,111 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Runin Panel</title>
+  <title>ZeusX Mobile Panel V1</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f0f0f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       margin: 0;
+      background: limegreen;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-
-    .menu {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 300px;
+    .panel {
+      position: absolute;
+      width: 250px;
+      background: #111;
+      color: white;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      font-family: sans-serif;
     }
-
-    .menu h2 {
-      color: red;
-      text-align: center;
+    .header {
+      background: #0078d7;
+      padding: 5px 10px;
+      cursor: move;
+      user-select: none;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    label {
-      display: block;
-      margin-top: 10px;
+    .close-btn {
+      background: red;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 3px;
+      width: 20px;
+      height: 20px;
     }
-
-    select, input[type="checkbox"] {
-      margin-top: 5px;
+    .content {
+      padding: 10px;
     }
-
-    .slider {
+    .row {
+      margin: 6px 0;
+    }
+    select, input[type="range"] {
       width: 100%;
-      margin-top: 15px;
-    }
-
-    .footer {
-      font-size: 0.8em;
-      margin-top: 20px;
-      text-align: center;
-      color: #333;
     }
   </style>
 </head>
 <body>
-  <div class="menu">
-    <h2>Runin Panel</h2>
-
-    <label><input type="checkbox" checked> เปิดจุดหัว</label>
-
-    <label>เลือกระดับยิงหัว
-      <select>
-        <option>HIGH = สูง</option>
-        <option>MEDIUM = กลาง</option>
-        <option>LOW = ต่ำ</option>
-      </select>
-    </label>
-
-    <label>เลือกโหมดที่เล่น
-      <select>
-        <option>1-1</option>
-        <option>2-2</option>
-        <option>ทีม</option>
-        <option>เดิมพัน</option>
-      </select>
-    </label>
-
-    <label><input type="checkbox"> เพิ่มจบไว 100%</label>
-    <label><input type="checkbox"> ตอบสนองไวขึ้น</label>
-
-    <div class="footer">
-      กันแบน - กันดำ - กันรายงาน<br>
-      ปรับความไวการลากหัว
+  <div class="panel" id="panel">
+    <div class="header">
+      ZeusX Mobile Panel - V.1
+      <button class="close-btn" onclick="document.getElementById('panel').style.display='none'">x</button>
     </div>
-
-    <input type="range" class="slider" min="0" max="100" value="60">
+    <div class="content">
+      <div class="row"><input type="checkbox"> Aimbot</div>
+      <div class="row"><input type="checkbox"> NO Ban</div>
+      <div class="row"><input type="checkbox"> Aimlock</div>
+      <div class="row"><input type="checkbox"> No Recoil</div>
+      <div class="row">ความไว: <input type="range" min="0" max="100"></div>
+      <div class="row">
+        <label>เลือกระดับ: 
+          <select>
+            <option>ต่ำ</option>
+            <option>กลาง</option>
+            <option selected>สูง</option>
+          </select>
+        </label>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // ทำให้ panel ขยับได้
+    dragElement(document.getElementById("panel"));
+
+    function dragElement(el) {
+      const header = el.querySelector(".header");
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      header.onmousedown = dragMouseDown;
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        el.style.top = (el.offsetTop - pos2) + "px";
+        el.style.left = (el.offsetLeft - pos1) + "px";
+      }
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+  </script>
 </body>
 </html>
