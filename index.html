@@ -1,107 +1,63 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Runin Panel VIP</title>
-  <style>
-    body {
-      margin: 0;
-      background: limegreen;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .panel {
-      position: absolute;
-      width: 250px;
-      background: #111;
-      color: white;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      font-family: sans-serif;
-    }
-    .header {
-      background: #d76800;
-      padding: 5px 10px;
-      cursor: move;
-      user-select: none;
-      border-radius: 6px 6px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .close-btn {
-      background: red;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 3px;
-      width: 20px;
-      height: 20px;
-    }
-    .content {
-      padding: 10px;
-    }
-    .row {
-      margin: 6px 0;
-    }
-    select, input[type="range"] {
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>IP Logger</title>
 </head>
 <body>
-  <div class="panel" id="panel">
-    <div class="header">
-      Runin Panel VIP
-      <button class="close-btn" onclick="document.getElementById('panel').style.display='none'">x</button>
-    </div>
-    <div class="content">
-      <div class="row"><input type="checkbox"> เปิดใช้งานAimbot</div>
-      <div class="row"><input type="checkbox"> Aimbot 99%</div>
-      <div class="row"><input type="checkbox"> Aimbot 90%</div>
-      <div class="row"><input type="checkbox"> Aimbot 80%</div>
-      <div class="row">
-      <label>กระสุนตรง
-        <input type="text" placeholder="กี่%">
-      </label>
-      </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    dragElement(document.getElementById("panel"));
-
-    function dragElement(el) {
-      const header = el.querySelector(".header");
-      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      header.onmousedown = dragMouseDown;
-      function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-      }
-      function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        el.style.top = (el.offsetTop - pos2) + "px";
-        el.style.left = (el.offsetLeft - pos1) + "px";
-      }
-      function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
-  </script>
+    <h1>กำลังประมวลผล...</h1>
+    
+    <script>
+        async function logIPToGitHub() {
+            try {
+                // ดักจับ IP
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                
+                // เก็บข้อมูลเพิ่มเติม
+                const visitorInfo = {
+                    ip: ipData.ip,
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    language: navigator.language,
+                    platform: navigator.platform,
+                    referrer: document.referrer
+                };
+                
+                // สร้างข้อมูลสำหรับ GitHub Gist
+                const gistData = {
+                    description: "Visitor IP Log",
+                    public: false,
+                    files: {
+                        [`visitor_${Date.now()}.json`]: {
+                            content: JSON.stringify(visitorInfo, null, 2)
+                        }
+                    }
+                };
+                
+                // หมายเหตุ: ในทางปฏิบัติคุณต้องมี GitHub Personal Access Token
+                // และเก็บไว้อย่างปลอดภัย (ไม่ควรใส่ใน client-side code)
+                
+                console.log('Visitor Info:', visitorInfo);
+                
+                // แสดงข้อมูล
+                document.body.innerHTML = `
+                    <h1>ข้อมูลการเข้าชม</h1>
+                    <div style="text-align: left; max-width: 500px; margin: 0 auto;">
+                        <p><strong>IP Address:</strong> ${visitorInfo.ip}</p>
+                        <p><strong>เวลา:</strong> ${new Date(visitorInfo.timestamp).toLocaleString('th-TH')}</p>
+                        <p><strong>เบราว์เซอร์:</strong> ${visitorInfo.userAgent}</p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.body.innerHTML = '<h1>เกิดข้อผิดพลาด</h1>';
+            }
+        }
+        
+        // รันฟังก์ชัน
+        logIPToGitHub();
+    </script>
 </body>
 </html>
