@@ -2,62 +2,209 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>IP Logger</title>
-</head>
-<body>
-    <h1>กำลังประมวลผล...</h1>
-    
-    <script>
-        async function logIPToGitHub() {
-            try {
-                // ดักจับ IP
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                
-                // เก็บข้อมูลเพิ่มเติม
-                const visitorInfo = {
-                    ip: ipData.ip,
-                    timestamp: new Date().toISOString(),
-                    userAgent: navigator.userAgent,
-                    language: navigator.language,
-                    platform: navigator.platform,
-                    referrer: document.referrer
-                };
-                
-                // สร้างข้อมูลสำหรับ GitHub Gist
-                const gistData = {
-                    description: "Visitor IP Log",
-                    public: false,
-                    files: {
-                        [`visitor_${Date.now()}.json`]: {
-                            content: JSON.stringify(visitorInfo, null, 2)
-                        }
-                    }
-                };
-                
-                // หมายเหตุ: ในทางปฏิบัติคุณต้องมี GitHub Personal Access Token
-                // และเก็บไว้อย่างปลอดภัย (ไม่ควรใส่ใน client-side code)
-                
-                console.log('Visitor Info:', visitorInfo);
-                
-                // แสดงข้อมูล
-                document.body.innerHTML = `
-                    <h1>ข้อมูลการเข้าชม</h1>
-                    <div style="text-align: left; max-width: 500px; margin: 0 auto;">
-                        <p><strong>IP Address:</strong> ${visitorInfo.ip}</p>
-                        <p><strong>เวลา:</strong> ${new Date(visitorInfo.timestamp).toLocaleString('th-TH')}</p>
-                        <p><strong>เบราว์เซอร์:</strong> ${visitorInfo.userAgent}</p>
-                    </div>
-                `;
-                
-            } catch (error) {
-                console.error('Error:', error);
-                document.body.innerHTML = '<h1>เกิดข้อผิดพลาด</h1>';
-            }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Jump Scare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        // รันฟังก์ชัน
-        logIPToGitHub();
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #f0f6fc;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #58a6ff;
+        }
+        
+        .description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .warning {
+            background-color: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 30px;
+            color: #f85149;
+        }
+        
+        .button {
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 10px;
+        }
+        
+        .button:hover {
+            background-color: #2ea043;
+        }
+        
+        .button-secondary {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+        }
+        
+        .button-secondary:hover {
+            background-color: #30363d;
+        }
+        
+        .jumpscare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d1117;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .jumpscare-content {
+            text-align: center;
+            animation: scare 0.5s ease-in-out;
+        }
+        
+        .jumpscare-image {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 6px;
+        }
+        
+        .jumpscare-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #f85149;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(248, 81, 73, 0.5);
+        }
+        
+        @keyframes scare {
+            0% { transform: scale(0.1); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+        
+        .code-block {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🐙</div>
+            <h1>GitHub Jump Scare</h1>
+            <p class="description">เอฟเฟกต์จัมสแก (Jump Scare) ในธีม GitHub - ระวัง! อาจทำให้ตกใจได้</p>
+        </div>
+        
+        <div class="warning">
+            ⚠️ คำเตือน: เอฟเฟกต์นี้มีภาพและเสียงที่อาจทำให้ตกใจได้ กรุณาใช้ด้วยความระมัดระวัง
+        </div>
+        
+        <div class="code-block">
+            // ตัวอย่างโค้ด GitHub Jump Scare<br>
+            function triggerJumpScare() {<br>
+            &nbsp;&nbsp;showScaryImage();<br>
+            &nbsp;&nbsp;playLoudSound();<br>
+            &nbsp;&nbsp;setTimeout(hideScaryImage, 2000);<br>
+            }
+        </div>
+        
+        <div>
+            <button class="button" id="triggerButton">เริ่มจัมสแก!</button>
+            <button class="button button-secondary" id="settingsButton">การตั้งค่า</button>
+        </div>
+        
+        <div class="footer">
+            <p>สร้างด้วย HTML, CSS และ JavaScript | ธีม GitHub Dark</p>
+        </div>
+    </div>
+    
+    <div class="jumpscare" id="jumpscare">
+        <div class="jumpscare-content">
+            <img src="https://i.imgur.com/3J8lZ2A.png" alt="Scary Image" class="jumpscare-image">
+            <div class="jumpscare-text">BOO!</div>
+        </div>
+    </div>
+    
+    <audio id="scarySound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-horror-scream-2836.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.getElementById('triggerButton').addEventListener('click', function() {
+            // แสดงจัมสแก
+            const jumpscare = document.getElementById('jumpscare');
+            jumpscare.style.display = 'flex';
+            
+            // เล่นเสียง
+            const sound = document.getElementById('scarySound');
+            sound.volume = 0.5;
+            sound.play();
+            
+            // ซ่อนจัมสแกหลังจาก 2 วินาที
+            setTimeout(function() {
+                jumpscare.style.display = 'none';
+            }, 2000);
+        });
+        
+        document.getElementById('settingsButton').addEventListener('click', function() {
+            alert('การตั้งค่า: คุณสามารถปรับเปลี่ยนระดับเสียงและเลือกรูปภาพได้ที่นี่');
+        });
     </script>
 </body>
 </html>
