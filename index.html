@@ -1,107 +1,164 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Runin Panel VIP</title>
-  <style>
+<meta charset="UTF-8">
+<title>Game Menu UI</title>
+<style>
     body {
-      margin: 0;
-      background: limegreen;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        background: #111;
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
     }
-    .panel {
-      position: absolute;
-      width: 250px;
-      background: #111;
-      color: white;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      font-family: sans-serif;
+
+    .menu {
+        width: 320px;
+        background: linear-gradient(180deg, #1c1c1c, #0f0f0f);
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
-    .header {
-      background: #d76800;
-      padding: 5px 10px;
-      cursor: move;
-      user-select: none;
-      border-radius: 6px 6px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 5px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .close-btn {
-      background: red;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 3px;
-      width: 20px;
-      height: 20px;
+
+    .item:last-child {
+        border-bottom: none;
     }
-    .content {
-      padding: 10px;
+
+    .text {
+        line-height: 1.2;
     }
-    .row {
-      margin: 6px 0;
+
+    .title {
+        font-size: 14px;
+        font-weight: bold;
     }
-    select, input[type="range"] {
-      width: 100%;
+
+    .sub {
+        font-size: 11px;
+        color: #aaa;
     }
-  </style>
+
+    /* Toggle Switch */
+    .switch {
+        position: relative;
+        width: 38px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #c0392b;
+        transition: 0.3s;
+        border-radius: 20px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #2ecc71;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(18px);
+    }
+</style>
 </head>
 <body>
-  <div class="panel" id="panel">
-    <div class="header">
-      Runin Panel VIP
-      <button class="close-btn" onclick="document.getElementById('panel').style.display='none'">x</button>
-    </div>
-    <div class="content">
-      <div class="row"><input type="checkbox"> เปิดใช้งานAimbot</div>
-      <div class="row"><input type="checkbox"> Aimbot 99%</div>
-      <div class="row"><input type="checkbox"> Aimbot 90%</div>
-      <div class="row"><input type="checkbox"> Aimbot 80%</div>
-      <div class="row">
-      <label>กระสุนตรง
-        <input type="text" placeholder="กี่%">
-      </label>
-      </div>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    dragElement(document.getElementById("panel"));
+<div class="menu">
+    <div class="item">
+        <div class="text">
+            <div class="title">Drag Aimbot [External]</div>
+            <div class="sub">เปิดในเกม</div>
+        </div>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
 
-    function dragElement(el) {
-      const header = el.querySelector(".header");
-      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      header.onmousedown = dragMouseDown;
-      function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-      }
-      function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        el.style.top = (el.offsetTop - pos2) + "px";
-        el.style.left = (el.offsetLeft - pos1) + "px";
-      }
-      function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-      }
-    }
-  </script>
+    <div class="item">
+        <div class="text">
+            <div class="title">Sniper Scope</div>
+            <div class="sub">เปิด Lobby</div>
+        </div>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="item">
+        <div class="text">
+            <div class="title">Sniper Switch</div>
+            <div class="sub">เปิด Lobby</div>
+        </div>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="item">
+        <div class="text">
+            <div class="title">Chams Menu</div>
+            <div class="sub">Apply in Anywhere</div>
+        </div>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="item">
+        <div class="text">
+            <div class="title">Streamer</div>
+            <div class="sub">ปิดการแสดงผล</div>
+        </div>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="item">
+        <div class="text">
+            <div class="title">N/A...</div>
+            <div class="sub">—</div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
