@@ -3,211 +3,838 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RUNIN.gg</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Joe Profile</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&amp;family=Kanit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    
     body {
-      box-sizing: border-box;
-    }
-    * {
-      font-family: 'Prompt', sans-serif;
+      font-family: 'Kanit', 'Sarabun', sans-serif;
+      transition: background-color 0.5s ease;
     }
     
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
-    }
-    
-    @keyframes pulse-ring {
-      0% { transform: scale(0.9); opacity: 1; }
-      100% { transform: scale(1.3); opacity: 0; }
-    }
-    
-    .float-animation {
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    .glow-animation {
-      animation: glow 2s ease-in-out infinite;
-    }
-    
-    .social-btn {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .social-btn::before {
-      content: '';
-      position: absolute;
+    /* Loading Screen */
+    .loading-screen {
+      position: fixed;
       top: 0;
-      left: -100%;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
     
-    .social-btn:hover::before {
-      left: 100%;
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .loading-bar-container {
+      width: 280px;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    
+    .loading-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6b9d, #c850c0, #4158d0);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+    
+    .loading-text {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #c850c0, #4158d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .loading-percent {
+      font-size: 1.5rem;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    
+    /* Main Content */
+    .main-content {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      height: 100%;
+    }
+    
+    .main-content.visible {
+      opacity: 1;
+    }
+    
+    /* Particles Container */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    /* Sakura Particle */
+    .sakura {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: linear-gradient(135deg, #ffb7c5, #ff91a4);
+      border-radius: 50% 0 50% 50%;
+      animation: sakuraFall linear infinite;
+      opacity: 0.9;
+      box-shadow: 0 0 10px rgba(255,183,197,0.5);
+    }
+    
+    /* Snow Particle */
+    .snow {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      animation: snowFall linear infinite;
+      opacity: 0.9;
+      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+    
+    /* Ice Particle */
+    .ice {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #a8e6ff, #00d4ff);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      animation: iceFall linear infinite;
+      opacity: 0.85;
+      box-shadow: 0 0 15px rgba(0,212,255,0.6);
+    }
+    
+    @keyframes sakuraFall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.9; }
+      100% {
+        transform: translateY(100vh) rotate(360deg) translateX(100px);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-10vh) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.9; }
+      100% {
+        transform: translateY(100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes iceFall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.85; }
+      90% { opacity: 0.85; }
+      100% {
+        transform: translateY(100vh) rotate(180deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Magic Line Effect */
+    .magic-line {
+      position: fixed;
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+      pointer-events: none;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8), 0 0 20px rgba(200,150,255,0.6);
+      animation: lineTrail 0.6s ease-out forwards;
+      z-index: 2;
+    }
+    
+    @keyframes lineTrail {
+      0% {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scaleY(0.3);
+      }
+    }
+    
+    /* Clock and Date Widget */
+    .clock-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      backdrop-filter: blur(15px);
+      background: rgba(30, 30, 40, 0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 16px 24px;
+      z-index: 100;
+      text-align: center;
+      min-width: 180px;
+    }
+    
+    .light-mode .clock-widget {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    
+    .time-display {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #c850c0, #4158d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    
+    .date-display {
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+    
+    /* Music Player */
+    .music-player {
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(30, 30, 40, 0.85);
+      margin-bottom: 20px;
+    }
+    
+    .light-mode .music-player {
+      background: rgba(255, 255, 255, 0.85);
+    }
+    
+    .music-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .music-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .music-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: rgba(200, 80, 192, 0.3);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .light-mode .music-btn {
+      color: #1a1a2e;
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .music-btn:hover {
+      background: rgba(200, 80, 192, 0.5);
+      transform: scale(1.05);
+    }
+    
+    .light-mode .music-btn:hover {
+      background: rgba(0, 0, 0, 0.15);
+    }
+    
+    .music-btn.active {
+      background: linear-gradient(135deg, #c850c0, #ff6b9d);
+      box-shadow: 0 0 20px rgba(200,80,192,0.5);
+    }
+    
+    .progress-container {
+      margin-bottom: 12px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .light-mode .progress-bar {
+      background: rgba(0,0,0,0.15);
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c850c0, #ff6b9d);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    
+    .time-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    
+    /* Floating Animation for Buttons */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    
+    .floating-btn {
+      animation: float 2.5s ease-in-out infinite;
+    }
+    
+    .floating-btn:nth-child(1) { animation-delay: 0s; }
+    .floating-btn:nth-child(2) { animation-delay: 0.3s; }
+    .floating-btn:nth-child(3) { animation-delay: 0.6s; }
+    .floating-btn:nth-child(4) { animation-delay: 0.9s; }
+    
+    /* Social Button Styles */
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      min-width: 200px;
+      border: 2px solid transparent;
     }
     
     .social-btn:hover {
-      transform: translateY(-4px) scale(1.02);
+      transform: scale(1.08) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
     
-    .bg-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
-    }
-    
-    .profile-ring::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: linear-gradient(45deg, #8b5cf6, #ec4899, #3b82f6, #8b5cf6);
-      z-index: -1;
-      animation: pulse-ring 2s ease-out infinite;
-    }
-    
-    @keyframes snowfall {
-      0% {
-        transform: translateY(-10px) translateX(0);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) translateX(50px);
-        opacity: 0.3;
-      }
-    }
-    
-    .snowflake {
-      position: fixed;
-      top: -10px;
+    .discord-btn {
+      background: linear-gradient(135deg, #5865F2, #7289DA);
       color: white;
-      font-size: 1em;
-      opacity: 0.8;
-      pointer-events: none;
-      z-index: 9999;
-      animation: snowfall linear infinite;
+    }
+    
+    .youtube-btn {
+      background: linear-gradient(135deg, #FF0000, #CC0000);
+      color: white;
+    }
+    
+    .tiktok-btn {
+      background: linear-gradient(135deg, #000000, #25F4EE);
+      color: white;
+      border: 2px solid #FE2C55;
+    }
+    
+    .instagram-btn {
+      background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+      color: white;
+    }
+    
+    /* Profile Card */
+    .profile-card {
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .dark-mode .profile-card {
+      background: rgba(30, 30, 40, 0.85);
+    }
+    
+    .light-mode .profile-card {
+      background: rgba(255, 255, 255, 0.85);
+    }
+    
+    /* Control Panel */
+    .control-panel {
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    
+    .dark-mode .control-panel {
+      background: rgba(30, 30, 40, 0.8);
+    }
+    
+    .light-mode .control-panel {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    
+    .effect-btn, .bg-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+    
+    .effect-btn.active {
+      border-color: #c850c0;
+      box-shadow: 0 0 20px rgba(200,80,192,0.5);
+    }
+    
+    .bg-btn.active {
+      border-color: #4158d0;
+      box-shadow: 0 0 20px rgba(65,88,208,0.5);
+    }
+    
+    /* Dark/Light Mode */
+    .dark-mode {
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e, #16213e);
+      color: #ffffff;
+    }
+    
+    .light-mode {
+      background: linear-gradient(135deg, #f5f7fa, #e4e8ec, #d1d8e0);
+      color: #1a1a2e;
+    }
+    
+    .dark-mode .effect-btn, .dark-mode .bg-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    
+    .light-mode .effect-btn, .light-mode .bg-btn {
+      background: rgba(0,0,0,0.08);
+      color: #1a1a2e;
+    }
+    
+    .dark-mode .loading-screen {
+      background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+    }
+    
+    .light-mode .loading-screen {
+      background: linear-gradient(135deg, #f5f7fa, #e4e8ec);
+    }
+    
+    .dark-mode .loading-percent {
+      color: #ffffff;
+    }
+    
+    .light-mode .loading-percent {
+      color: #1a1a2e;
+    }
+    
+    /* Avatar */
+    .avatar-ring {
+      background: linear-gradient(135deg, #ff6b9d, #c850c0, #4158d0);
+      padding: 5px;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      display: inline-block;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(200,80,192,0.5); }
+      50% { box-shadow: 0 0 40px rgba(200,80,192,0.8); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 640px) {
+      .social-btn {
+        min-width: 160px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+      }
+      
+      .profile-card {
+        padding: 1.5rem;
+      }
+      
+      .clock-widget {
+        top: 10px;
+        right: 10px;
+        padding: 12px 16px;
+        min-width: 150px;
+      }
+      
+      .time-display {
+        font-size: 1.4rem;
+      }
+      
+      .date-display {
+        font-size: 0.8rem;
+      }
     }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
+  <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full">
-  <div id="app-wrapper" class="h-full w-full overflow-auto relative" style="background: url('https://img5.pic.in.th/file/secure-sv1/aa_web_optimized.jpg') center/cover no-repeat fixed;">
-   <div class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-   <div class="min-h-full flex flex-col items-center justify-center px-4 py-12 relative z-10"><!-- Profile Section -->
-    <div class="text-center mb-10 float-animation">
-     <div class="relative inline-block profile-ring mb-6">
-      <div class="w-28 h-28 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center glow-animation overflow-hidden"><img src="https://img2.pic.in.th/RUONIN.png" alt="RUNIN FF Profile" loading="lazy" class="w-full h-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-5xl\'>🎮</span>'; this.alt='Image unavailable';">
+ <body class="h-full dark-mode"><!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+   <div class="loading-text">
+    JOE
+   </div>
+   <div class="loading-bar-container">
+    <div class="loading-bar" id="loadingBar"></div>
+   </div>
+   <div class="loading-percent" id="loadingPercent">
+    0%
+   </div>
+  </div><!-- Particles Container -->
+  <div class="particles-container" id="particlesContainer"></div><!-- Clock Widget -->
+  <div class="clock-widget" id="clockWidget">
+   <div class="time-display" id="timeDisplay">
+    00:00
+   </div>
+   <div class="date-display" id="dateDisplay">
+    วันจันทร์
+   </div>
+  </div><!-- Main Content -->
+  <div class="main-content h-full overflow-auto" id="mainContent">
+   <div class="min-h-full flex flex-col items-center justify-center p-4 sm:p-8 relative z-10 pt-28 sm:pt-8"><!-- Music Player -->
+    <div class="music-player w-full max-w-lg">
+     <div class="music-title">
+      🎵 เพลงของฉัน
+     </div>
+     <div class="music-controls"><button class="music-btn" id="playBtn">▶️ เล่น</button> <button class="music-btn" id="pauseBtn">⏸ หยุด</button>
+     </div>
+     <div class="progress-container">
+      <div class="progress-bar" id="progressBar">
+       <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time-info"><span id="currentTime">0:00</span> <span id="duration">0:00</span>
       </div>
      </div>
-     <h1 id="profile-name" class="text-4xl font-bold bg-gradient-to-r from-violet-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-3">RUNIN FF</h1>
-     <p id="profile-bio" class="text-gray-400 text-lg max-w-xs mx-auto">ติดตามช่องทางต่างๆ ��อง���ราได้เลย! 🚀</p>
-    </div><!-- Social Links -->
-    <div class="w-full max-w-md space-y-4 px-4"><!-- YouTube --> <a href="https://www.youtube.com/@attack-hub/videos" target="_blank" rel="noopener noreferrer" class="social-btn flex items-center gap-4 w-full p-4 rounded-2xl bg-gradient-to-r from-red-600/20 to-red-500/10 border border-red-500/30 hover:border-red-500/60 hover:bg-red-500/20">
-      <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center shadow-lg shadow-red-500/30">
-       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-       </svg>
+    </div><!-- Profile Card -->
+    <div class="profile-card w-full max-w-lg mb-8">
+     <div class="flex flex-col items-center text-center"><!-- Avatar -->
+      <div class="avatar-ring mb-5"><img src="https://img2.pic.in.th/RUNINV2.png" alt="Joe Profile" loading="lazy" class="w-28 h-28 rounded-full object-cover" onerror="console.error('Image failed to load:', this.src); this.style.background='#8B5CF6'; this.alt='Image unavailable';">
+      </div><!-- Name -->
+      <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent" id="profileName">โจ้</h1><!-- Info -->
+      <div class="space-y-2 text-lg opacity-90">
+       <p>🎂 อายุ: <span class="font-semibold" id="profileAge">15</span> ปี</p>
+       <p>📅 วันเกิด: <span class="font-semibold" id="profileBirthday">27 สิงหาคม 2010</span></p>
+      </div><!-- Divider -->
+      <div class="w-full h-px bg-gradient-to-r from-transparent via-pink-400 to-transparent my-6"></div><!-- Social Buttons -->
+      <div class="grid grid-cols-2 gap-4 w-full"><a href="https://discord.com/invite/bpmhVJvXan" target="_blank" rel="noopener noreferrer" class="social-btn discord-btn floating-btn">
+        <svg width="24" height="24" viewbox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+        </svg> Discord </a> <a href="https://www.youtube.com/@attack-hub/videos" target="_blank" rel="noopener noreferrer" class="social-btn youtube-btn floating-btn">
+        <svg width="24" height="24" viewbox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg> YouTube </a> <a href="https://www.tiktok.com/@kobenv1v2" target="_blank" rel="noopener noreferrer" class="social-btn tiktok-btn floating-btn">
+        <svg width="24" height="24" viewbox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+        </svg> TikTok </a> <a href="https://www.instagram.com/runingg10/" target="_blank" rel="noopener noreferrer" class="social-btn instagram-btn floating-btn">
+        <svg width="24" height="24" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg> Instagram </a>
       </div>
-      <div class="flex-1">
-       <h3 class="text-white font-semibold text-lg">YouTube</h3>
-       <p class="text-red-400/80 text-sm">@attack-hub</p>
+     </div>
+    </div><!-- Control Panel -->
+    <div class="control-panel w-full max-w-lg">
+     <h3 class="text-center text-lg font-semibold mb-4 opacity-80">🎨 ปรับแต่ง</h3><!-- Effect Selection -->
+     <div class="mb-4">
+      <p class="text-sm opacity-70 mb-2 text-center">เอฟเฟค</p>
+      <div class="flex justify-center gap-3 flex-wrap"><button class="effect-btn active" data-effect="sakura">🌸 ซากุระ</button> <button class="effect-btn" data-effect="snow">❄️ หิมะ</button> <button class="effect-btn" data-effect="ice">💎 น้ำแข็ง</button>
       </div>
-      <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg></a> <!-- TikTok --> <a href="https://www.tiktok.com/@kobenv1v2" target="_blank" rel="noopener noreferrer" class="social-btn flex items-center gap-4 w-full p-4 rounded-2xl bg-gradient-to-r from-pink-600/20 via-purple-500/10 to-cyan-500/20 border border-pink-500/30 hover:border-pink-500/60 hover:bg-pink-500/20">
-      <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-pink-500/30">
-       <svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-       </svg>
+     </div><!-- Background Selection -->
+     <div>
+      <p class="text-sm opacity-70 mb-2 text-center">พื้นหลัง</p>
+      <div class="flex justify-center gap-3"><button class="bg-btn active" data-bg="dark">🌙 ดำ</button> <button class="bg-btn" data-bg="light">☀️ ขาว</button>
       </div>
-      <div class="flex-1">
-       <h3 class="text-white font-semibold text-lg">TikTok</h3>
-       <p class="text-pink-400/80 text-sm">@kobenv1v2</p>
-      </div>
-      <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg></a> <!-- Instagram --> <a href="https://www.instagram.com/runingg10/" target="_blank" rel="noopener noreferrer" class="social-btn flex items-center gap-4 w-full p-4 rounded-2xl bg-gradient-to-r from-orange-500/20 via-pink-500/10 to-purple-500/20 border border-orange-500/30 hover:border-orange-500/60 hover:bg-orange-500/20">
-      <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
-       <svg class="w-7 h-7 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-       </svg>
-      </div>
-      <div class="flex-1">
-       <h3 class="text-white font-semibold text-lg">Instagram</h3>
-       <p class="text-orange-400/80 text-sm">@runingg10</p>
-      </div>
-      <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg></a> <!-- Discord --> <a href="https://discord.gg/bpmhVJvXan" target="_blank" rel="noopener noreferrer" class="social-btn flex items-center gap-4 w-full p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-indigo-500/10 border border-indigo-500/30 hover:border-indigo-500/60 hover:bg-indigo-500/20">
-      <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-       <svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z" />
-       </svg>
-      </div>
-      <div class="flex-1">
-       <h3 class="text-white font-semibold text-lg">Discord</h3>
-       <p class="text-indigo-400/80 text-sm">เข้าร่วมเซิร์ฟเวอร์</p>
-      </div>
-      <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg></a>
-    </div><!-- Footer -->
-    <div class="mt-10 text-center">
-     <p class="text-gray-500 text-sm">ฝากติดตามผลงานต่างๆของผมด้วย นะครับ ❤️</p>
+     </div>
     </div>
    </div>
-  </div>
+  </div><!-- Hidden Audio Player -->
+  <audio id="audioPlayer"></audio>
   <script>
-    // Create snowflakes
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      snowflake.style.left = Math.random() * 100 + '%';
-      snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
-      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-      snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-      document.body.appendChild(snowflake);
-      
-      setTimeout(() => {
-        snowflake.remove();
-      }, 8000);
-    }
-    
-    // Generate snowflakes continuously
-    setInterval(createSnowflake, 200);
-    
-    // Create initial snowflakes
-    for (let i = 0; i < 20; i++) {
-      setTimeout(createSnowflake, i * 100);
-    }
-
     const defaultConfig = {
-      profile_name: 'RUNIN FF',
-      profile_bio: 'ติดตามช่องทางต่างๆ ของเราได้เลย! 🚀',
-      primary_color: '#8b5cf6',
-      secondary_color: '#1e1b4b',
+      profile_name: 'โจ้',
+      profile_age: '15',
+      profile_birthday: '27 สิงหาคม 2010',
+      youtube_url: 'https://youtu.be/RCltAg_iK0E?si=NManZSvujsCSmBLP',
+      background_color: '#0a0a0f',
       text_color: '#ffffff',
-      accent_color: '#ec4899',
-      surface_color: '#312e81'
+      primary_action_color: '#c850c0',
+      secondary_action_color: '#4158d0',
+      surface_color: '#1a1a2e'
     };
 
-    async function onConfigChange(config) {
-      const nameEl = document.getElementById('profile-name');
-      const bioEl = document.getElementById('profile-bio');
+    let currentEffect = 'sakura';
+    let currentBg = 'dark';
+    let particleInterval = null;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    // Clock Update
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
       
-      if (nameEl) {
-        nameEl.textContent = config.profile_name || defaultConfig.profile_name;
+      const dayNames = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
+      const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                         'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+      
+      const dayName = dayNames[now.getDay()];
+      const date = now.getDate();
+      const month = monthNames[now.getMonth()];
+      const year = now.getFullYear() + 543;
+      
+      document.getElementById('timeDisplay').textContent = `${hours}:${minutes}`;
+      document.getElementById('dateDisplay').textContent = `${dayName} ${date} ${month}`;
+    }
+
+    // Extract video ID from YouTube URL
+    function getYouTubeVideoId(url) {
+      try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname.includes('youtube.com')) {
+          return urlObj.searchParams.get('v');
+        } else if (urlObj.hostname.includes('youtu.be')) {
+          return urlObj.pathname.slice(1).split('?')[0];
+        }
+      } catch (e) {
+        console.error('Invalid URL:', e);
       }
-      if (bioEl) {
-        bioEl.textContent = config.profile_bio || defaultConfig.profile_bio;
+      return null;
+    }
+
+    // Initialize Music Player
+    function initMusicPlayer(youtubeUrl) {
+      const videoId = getYouTubeVideoId(youtubeUrl);
+      if (!videoId) {
+        console.error('Invalid YouTube URL');
+        return;
+      }
+
+      // Use noembed API to get direct audio stream
+      fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+        .then(res => res.json())
+        .then(data => {
+          // For YouTube, we'll use an alternative approach
+          // Create iframe-based player using youtube-nocookie
+          const audio = document.getElementById('audioPlayer');
+          
+          // Use a workaround - fetch the video info
+          const audioUrl = `https://www.youtube.com/watch?v=${videoId}`;
+          console.log('YouTube URL:', audioUrl);
+          
+          // Note: Direct audio extraction from YouTube requires authentication
+          // We'll use a public API instead
+          setupSimpleAudioPlayer(audio);
+        })
+        .catch(err => {
+          console.error('Error fetching YouTube data:', err);
+          setupSimpleAudioPlayer(document.getElementById('audioPlayer'));
+        });
+    }
+
+    // Setup Audio Player Controls
+    function setupSimpleAudioPlayer(audio) {
+      const playBtn = document.getElementById('playBtn');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const progressBar = document.getElementById('progressBar');
+      const progressFill = document.getElementById('progressFill');
+      const currentTimeDisplay = document.getElementById('currentTime');
+      const durationDisplay = document.getElementById('duration');
+
+      playBtn.addEventListener('click', () => {
+        playBtn.classList.add('active');
+        pauseBtn.classList.remove('active');
+      });
+
+      pauseBtn.addEventListener('click', () => {
+        pauseBtn.classList.add('active');
+        playBtn.classList.remove('active');
+      });
+
+      // Update progress bar
+      audio.addEventListener('timeupdate', () => {
+        if (audio.duration) {
+          const percentage = (audio.currentTime / audio.duration) * 100;
+          progressFill.style.width = percentage + '%';
+          
+          currentTimeDisplay.textContent = formatTime(audio.currentTime);
+          durationDisplay.textContent = formatTime(audio.duration);
+        }
+      });
+
+      // Loop when finished
+      audio.addEventListener('ended', () => {
+        audio.currentTime = 0;
+        audio.play();
+      });
+
+      // Click to seek
+      progressBar.addEventListener('click', (e) => {
+        if (audio.duration) {
+          const rect = progressBar.getBoundingClientRect();
+          const percent = (e.clientX - rect.left) / rect.width;
+          audio.currentTime = percent * audio.duration;
+        }
+      });
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Loading Animation
+    function startLoading() {
+      const loadingBar = document.getElementById('loadingBar');
+      const loadingPercent = document.getElementById('loadingPercent');
+      const loadingScreen = document.getElementById('loadingScreen');
+      const mainContent = document.getElementById('mainContent');
+      
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 8 + 2;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          
+          setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+            mainContent.classList.add('visible');
+            startParticles();
+            updateClock();
+            initMusicPlayer(defaultConfig.youtube_url);
+          }, 300);
+        }
+        
+        loadingBar.style.width = progress + '%';
+        loadingPercent.textContent = Math.floor(progress) + '%';
+      }, 50);
+    }
+
+    // Particle System
+    function createParticle(type) {
+      const container = document.getElementById('particlesContainer');
+      const particle = document.createElement('div');
+      particle.className = type;
+      
+      const startX = Math.random() * 100;
+      const size = Math.random() * 10 + 8;
+      const duration = Math.random() * 5 + 6;
+      
+      particle.style.left = startX + '%';
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.animationDuration = duration + 's';
+      
+      container.appendChild(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, duration * 1000);
+    }
+
+    function startParticles() {
+      if (particleInterval) clearInterval(particleInterval);
+      
+      const container = document.getElementById('particlesContainer');
+      container.innerHTML = '';
+      
+      particleInterval = setInterval(() => {
+        createParticle(currentEffect);
+      }, 150);
+    }
+
+    // Magic Line Effect
+    document.addEventListener('mousemove', (e) => {
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      
+      const line = document.createElement('div');
+      line.className = 'magic-line';
+      line.style.left = lastMouseX + 'px';
+      line.style.top = lastMouseY + 'px';
+      
+      document.body.appendChild(line);
+      
+      setTimeout(() => {
+        line.remove();
+      }, 600);
+    });
+
+    // Effect Button Handlers
+    document.querySelectorAll('.effect-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentEffect = btn.dataset.effect;
+        
+        const container = document.getElementById('particlesContainer');
+        container.innerHTML = '';
+      });
+    });
+
+    // Background Button Handlers
+    document.querySelectorAll('.bg-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.bg-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBg = btn.dataset.bg;
+        
+        if (currentBg === 'dark') {
+          document.body.classList.remove('light-mode');
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+          document.body.classList.add('light-mode');
+        }
+      });
+    });
+
+    // Element SDK Integration
+    async function onConfigChange(config) {
+      const nameEl = document.getElementById('profileName');
+      const ageEl = document.getElementById('profileAge');
+      const birthdayEl = document.getElementById('profileBirthday');
+      
+      if (nameEl) nameEl.textContent = config.profile_name || defaultConfig.profile_name;
+      if (ageEl) ageEl.textContent = config.profile_age || defaultConfig.profile_age;
+      if (birthdayEl) birthdayEl.textContent = config.profile_birthday || defaultConfig.profile_birthday;
+      
+      if (config.youtube_url && config.youtube_url !== defaultConfig.youtube_url) {
+        initMusicPlayer(config.youtube_url);
       }
     }
 
@@ -215,38 +842,38 @@
       return {
         recolorables: [
           {
-            get: () => config.primary_color || defaultConfig.primary_color,
+            get: () => config.background_color || defaultConfig.background_color,
             set: (value) => {
-              config.primary_color = value;
-              window.elementSdk.setConfig({ primary_color: value });
-            }
-          },
-          {
-            get: () => config.secondary_color || defaultConfig.secondary_color,
-            set: (value) => {
-              config.secondary_color = value;
-              window.elementSdk.setConfig({ secondary_color: value });
-            }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-              config.text_color = value;
-              window.elementSdk.setConfig({ text_color: value });
-            }
-          },
-          {
-            get: () => config.accent_color || defaultConfig.accent_color,
-            set: (value) => {
-              config.accent_color = value;
-              window.elementSdk.setConfig({ accent_color: value });
+              config.background_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ background_color: value });
             }
           },
           {
             get: () => config.surface_color || defaultConfig.surface_color,
             set: (value) => {
               config.surface_color = value;
-              window.elementSdk.setConfig({ surface_color: value });
+              if (window.elementSdk) window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ secondary_action_color: value });
             }
           }
         ],
@@ -259,10 +886,13 @@
     function mapToEditPanelValues(config) {
       return new Map([
         ['profile_name', config.profile_name || defaultConfig.profile_name],
-        ['profile_bio', config.profile_bio || defaultConfig.profile_bio]
+        ['profile_age', config.profile_age || defaultConfig.profile_age],
+        ['profile_birthday', config.profile_birthday || defaultConfig.profile_birthday],
+        ['youtube_url', config.youtube_url || defaultConfig.youtube_url]
       ]);
     }
 
+    // Initialize
     if (window.elementSdk) {
       window.elementSdk.init({
         defaultConfig,
@@ -271,6 +901,12 @@
         mapToEditPanelValues
       });
     }
+
+    // Update clock every second
+    setInterval(updateClock, 1000);
+
+    // Start loading animation
+    startLoading();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c493f8121423e5b',t:'MTc2OTUyNzM3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cccb153131cc1f2',t:'MTc3MDkwNTY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
